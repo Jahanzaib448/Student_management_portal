@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Course Materials{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>📚 Course Materials</h1>
+                <div>
+                    <a href="{{ url_for('upload_material', course_id=course.id) }}" 
+                       class="btn btn-success">
+                        ➕ Upload Material
+                    </a>
+                    <a href="{{ url_for('course_detail', id=course.id) }}" 
+                       class="btn btn-secondary">
+                        ← Back to Course
+                    </a>
+                </div>
+            </div>
+            <h4 class="text-muted">{{ course.course_name }} ({{ course.course_code }})</h4>
+        </div>
+    </div>
+
+    <!-- Materials List -->
+    <div class="row mt-4">
+        <div class="col-12">
+            {% if materials %}
+                <div class="list-group">
+                    {% for material in materials %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">
+                                    <span style="font-size: 24px;">{{ material.get_file_icon() }}</span>
+                                    {{ material.title }}
+                                    <span class="badge bg-primary ms-2">{{ material.material_type }}</span>
+                                </h5>
+                                <p class="mb-1 text-muted small">
+                                    {{ material.description or 'No description' }}
+                                </p>
+                                <p class="mb-0 text-muted small">
+                                    <strong>File:</strong> {{ material.original_filename }}
+                                    <strong class="ms-3">Size:</strong> {{ material.get_file_size_display() }}
+                                    <strong class="ms-3">Uploaded:</strong> {{ material.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
+                                </p>
+                            </div>
+                            <div class="btn-group">
+                                <a href="{{ url_for('download_material', material_id=material.id) }}" 
+                                   class="btn btn-sm btn-primary">
+                                    📥 Download
+                                </a>
+                                <form action="{{ url_for('delete_material', material_id=material.id) }}" 
+                                      method="POST" 
+                                      style="display: inline;">
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete this material?')">
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center py-4">
+                    <h4>📭 No materials uploaded yet</h4>
+                    <p class="mb-0">
+                        <a href="{{ url_for('upload_material', course_id=course.id) }}">
+                            Upload the first material
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

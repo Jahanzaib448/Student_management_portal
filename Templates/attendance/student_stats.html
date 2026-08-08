@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance Stats - {{ student.student_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">📊 Attendance Stats: {{ student.student_name }}</h1>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h6>Total Days</h6>
+                    <h2>{{ total }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h6>✅ Present</h6>
+                    <h2>{{ present }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h6>❌ Absent</h6>
+                    <h2>{{ absent }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h6>📊 Percentage</h6>
+                    <h2>{{ percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course-wise Stats -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">📚 Course-wise Attendance</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Present</th>
+                            <th>Total</th>
+                            <th>Percentage</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in course_stats %}
+                        <tr>
+                            <td>{{ stat.course_name }}</td>
+                            <td>{{ stat.present }}</td>
+                            <td>{{ stat.total }}</td>
+                            <td>{{ stat.percentage|round(1) }}%</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" 
+                                         style="width: {{ stat.percentage }}%">
+                                        {{ stat.percentage|round(1) }}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Attendance -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">📋 Recent Attendance</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for att in attendances[:20] %}
+                        <tr>
+                            <td>{{ att.date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ att.course.course_name }}</td>
+                            <td>
+                                {% if att.status == 'Present' %}
+                                    <span class="badge bg-success">✅ Present</span>
+                                {% elif att.status == 'Absent' %}
+                                    <span class="badge bg-danger">❌ Absent</span>
+                                {% elif att.status == 'Late' %}
+                                    <span class="badge bg-warning">🕐 Late</span>
+                                {% elif att.status == 'Leave' %}
+                                    <span class="badge bg-info">📝 Leave</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ att.remarks or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="{{ url_for('attendance_report') }}" class="btn btn-info">
+                📊 View Report
+            </a>
+            <a href="{{ url_for('attendance') }}" class="btn btn-primary">
+                📋 Mark Attendance
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                📊 Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

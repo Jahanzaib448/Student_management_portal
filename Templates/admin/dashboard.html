@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">👑 Admin Dashboard</h1>
+            <p class="text-muted">Welcome, {{ user.full_name }}! You have full access to the system.</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total Users</h6>
+                            <h2 class="mb-0">{{ total_users }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total Students</h6>
+                            <h2 class="mb-0">{{ total_students }}</h2>
+                        </div>
+                        <i class="fas fa-user-graduate fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total Teachers</h6>
+                            <h2 class="mb-0">{{ total_teachers }}</h2>
+                        </div>
+                        <i class="fas fa-chalkboard-teacher fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total Courses</h6>
+                            <h2 class="mb-0">{{ total_courses }}</h2>
+                        </div>
+                        <i class="fas fa-book fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 👇 CHARTS ROW - NEW                          -->
+    <!-- ============================================ -->
+    <div class="row mb-4">
+        <!-- Student Course Distribution -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">📊 Student Course Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="courseChart" width="400" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Age Distribution -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">📊 Age Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ageChart" width="400" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">⚡ Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-primary">
+                            👥 Manage Users
+                        </a>
+                        <a href="{{ url_for('students') }}" class="btn btn-success">
+                            📋 All Students
+                        </a>
+                        <a href="{{ url_for('teachers') }}" class="btn btn-info">
+                            👨‍🏫 All Teachers
+                        </a>
+                        <a href="{{ url_for('courses') }}" class="btn btn-warning">
+                            📚 All Courses
+                        </a>
+                        <a href="{{ url_for('add_student') }}" class="btn btn-primary">
+                            ➕ Add Student
+                        </a>
+                        <a href="{{ url_for('add_teacher') }}" class="btn btn-success">
+                            ➕ Add Teacher
+                        </a>
+                        <a href="{{ url_for('add_course') }}" class="btn btn-info">
+                            ➕ Add Course
+                        </a>
+                        <a href="{{ url_for('attendance') }}" class="btn btn-secondary">
+                            📋 Attendance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Records -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">🆕 Recent Students</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% if recent_students %}
+                            {% for student in recent_students %}
+                            <a href="{{ url_for('edit_student', id=student.id) }}" 
+                               class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ student.student_name }}</strong>
+                                        <small class="text-muted d-block">{{ student.course }}</small>
+                                    </div>
+                                    <span class="badge bg-secondary">{{ student.age }} years</span>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted text-center">No students yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">🆕 Recent Teachers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% if recent_teachers %}
+                            {% for teacher in recent_teachers %}
+                            <a href="{{ url_for('edit_teacher', id=teacher.id) }}" 
+                               class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ teacher.teacher_name }}</strong>
+                                        <small class="text-muted d-block">{{ teacher.specialization }}</small>
+                                    </div>
+                                    <span class="badge bg-info">{{ teacher.qualification }}</span>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted text-center">No teachers yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">🆕 Recent Courses</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% if recent_courses %}
+                            {% for course in recent_courses %}
+                            <a href="{{ url_for('course_detail', id=course.id) }}" 
+                               class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ course.course_name }}</strong>
+                                        <small class="text-muted d-block">{{ course.course_code }}</small>
+                                    </div>
+                                    <span class="badge bg-primary">{{ course.credit_hours }} credits</span>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted text-center">No courses yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- Chart.js Library                             -->
+<!-- ============================================ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ============================================
+        // 1. Course Distribution - Pie Chart
+        // ============================================
+        const courseCtx = document.getElementById('courseChart').getContext('2d');
+        const courseData = {{ course_stats | tojson | safe }};
+        const colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6f42c1', '#fd7e14', '#20c997'];
+        
+        if (courseData && courseData.length > 0) {
+            new Chart(courseCtx, {
+                type: 'pie',
+                data: {
+                    labels: courseData.map(item => item[0]),
+                    datasets: [{
+                        data: courseData.map(item => item[1]),
+                        backgroundColor: colors.slice(0, courseData.length),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            document.getElementById('courseChart').style.display = 'none';
+            document.getElementById('courseChart').parentElement.innerHTML = 
+                '<p class="text-muted text-center py-4">📊 No course data available</p>';
+        }
+
+        // ============================================
+        // 2. Age Distribution - Bar Chart
+        // ============================================
+        const ageCtx = document.getElementById('ageChart').getContext('2d');
+        const ageData = {{ age_stats | tojson | safe }};
+        
+        if (ageData && ageData.length > 0) {
+            new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ageData.map(item => item[0] + ' years'),
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: ageData.map(item => item[1]),
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        } else {
+            document.getElementById('ageChart').style.display = 'none';
+            document.getElementById('ageChart').parentElement.innerHTML = 
+                '<p class="text-muted text-center py-4">📊 No age data available</p>';
+        }
+    });
+</script>
+{% endblock %}

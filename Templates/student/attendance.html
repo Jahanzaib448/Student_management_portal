@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}My Attendance{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">📊 My Attendance</h1>
+            <p class="text-muted">Student: {{ student.student_name }}</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Total Days</h6>
+                    <h2 class="mb-0">{{ total }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <h6 class="card-title">✅ Present</h6>
+                    <h2 class="mb-0">{{ present }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body">
+                    <h6 class="card-title">❌ Absent</h6>
+                    <h2 class="mb-0">{{ absent }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body">
+                    <h6 class="card-title">📊 Percentage</h6>
+                    <h2 class="mb-0">{{ percentage }}%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Late & Leave Stats -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6>🕐 Late</h6>
+                    <h3>{{ late }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6>📝 Leave</h6>
+                    <h3>{{ leave }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">📋 Attendance Records</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if attendances %}
+                            {% for att in attendances %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ att.date.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ att.course.course_name }}</td>
+                                <td>
+                                    {% if att.status == 'Present' %}
+                                        <span class="badge bg-success">✅ Present</span>
+                                    {% elif att.status == 'Absent' %}
+                                        <span class="badge bg-danger">❌ Absent</span>
+                                    {% elif att.status == 'Late' %}
+                                        <span class="badge bg-warning">🕐 Late</span>
+                                    {% elif att.status == 'Leave' %}
+                                        <span class="badge bg-info">📝 Leave</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ att.remarks or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    📭 No attendance records found.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

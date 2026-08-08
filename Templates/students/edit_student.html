@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Student</h2>
+
+<form method="POST">
+
+    <label>Name</label><br>
+    <input
+        type="text"
+        name="student_name"
+        value="{{ student.student_name }}"
+    >
+    <br><br>
+
+    <label>Email</label><br>
+    <input
+        type="email"
+        name="email"
+        value="{{ student.email }}"
+    >
+    <br><br>
+
+    <label>Age</label><br>
+    <input
+        type="number"
+        name="age"
+        value="{{ student.age }}"
+    >
+    <br><br>
+
+    <label>Course</label><br>
+    <input
+        type="text"
+        name="course"
+        value="{{ student.course }}"
+    >
+    <br><br>
+
+    <button type="submit">
+        Update Student
+    </button>
+
+</form>
+
+{% endblock %}

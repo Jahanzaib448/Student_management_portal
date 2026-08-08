@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">👨‍🏫 Teacher Dashboard</h1>
+            <p class="text-muted">Welcome, {{ user.full_name }}!</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">My Courses</h6>
+                            <h2 class="mb-0">{{ total_courses }}</h2>
+                        </div>
+                        <i class="fas fa-book fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">My Students</h6>
+                            <h2 class="mb-0">{{ total_students }}</h2>
+                        </div>
+                        <i class="fas fa-user-graduate fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Attendance</h6>
+                            <h2 class="mb-0">{{ present_count }}/{{ total_attendance }}</h2>
+                        </div>
+                        <i class="fas fa-clipboard-list fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Courses -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">📚 My Courses</h5>
+                </div>
+                <div class="card-body">
+                    {% if my_courses %}
+                        <div class="row">
+                            {% for course in my_courses %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ course.course_name }}</h5>
+                                        <p><strong>Code:</strong> {{ course.course_code }}</p>
+                                        <p><strong>Students:</strong> {{ course.students|length }}</p>
+                                        <p><strong>Duration:</strong> {{ course.duration }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-grid gap-1">
+                                            <a href="{{ url_for('course_detail', id=course.id) }}" 
+                                               class="btn btn-sm btn-primary">📋 View</a>
+                                            <a href="{{ url_for('attendance', course_id=course.id) }}" 
+                                               class="btn btn-sm btn-success">📋 Mark Attendance</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            🚫 No courses assigned yet. Contact admin.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">⚡ Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('attendance') }}" class="btn btn-primary">
+                            📋 Mark Attendance
+                        </a>
+                        <a href="{{ url_for('attendance_report') }}" class="btn btn-info">
+                            📊 Attendance Report
+                        </a>
+                        <a href="{{ url_for('my_courses') }}" class="btn btn-success">
+                            📚 My Courses
+                        </a>
+                        <a href="{{ url_for('profile') }}" class="btn btn-secondary">
+                            👤 My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

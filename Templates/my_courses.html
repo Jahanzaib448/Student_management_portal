@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}My Courses{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">📚 My Courses</h1>
+            <p class="text-muted">Role: {{ role|upper }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if courses %}
+            {% for course in courses %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">{{ course.course_code }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ course.course_name }}</h5>
+                        <p><strong>Credit Hours:</strong> {{ course.credit_hours }}</p>
+                        <p><strong>Duration:</strong> {{ course.duration }}</p>
+                        <p><strong>Teacher:</strong> 
+                            {% if course.teacher %}
+                                {{ course.teacher.teacher_name }}
+                            {% else %}
+                                <span class="text-muted">Not assigned</span>
+                            {% endif %}
+                        </p>
+                        {% if role == 'teacher' %}
+                            <p><strong>Students:</strong> {{ course.students|length }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('course_detail', id=course.id) }}" 
+                           class="btn btn-sm btn-primary w-100">📋 View Course</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center py-4">
+                    <h4>📚 No courses found</h4>
+                    <p class="mb-0">
+                        {% if role == 'student' %}
+                            You are not enrolled in any courses yet. Contact your teacher or admin.
+                        {% elif role == 'teacher' %}
+                            No courses assigned to you yet. Contact admin.
+                        {% else %}
+                            No courses available.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

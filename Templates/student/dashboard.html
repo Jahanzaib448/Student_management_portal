@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">👨‍🎓 Student Dashboard</h1>
+            <p class="text-muted">Welcome, {{ user.full_name }}!</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">My Courses</h6>
+                            <h2 class="mb-0">{{ total_courses }}</h2>
+                        </div>
+                        <i class="fas fa-book fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Attendance</h6>
+                            <h2 class="mb-0">{{ attendance_percentage }}%</h2>
+                        </div>
+                        <i class="fas fa-clipboard-check fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total Days</h6>
+                            <h2 class="mb-0">{{ total_attendance }}</h2>
+                        </div>
+                        <i class="fas fa-calendar-alt fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Courses -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">📚 My Courses</h5>
+                </div>
+                <div class="card-body">
+                    {% if my_courses %}
+                        <div class="row">
+                            {% for course in my_courses %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ course.course_name }}</h5>
+                                        <p><strong>Code:</strong> {{ course.course_code }}</p>
+                                        <p><strong>Teacher:</strong> 
+                                            {% if course.teacher %}
+                                                {{ course.teacher.teacher_name }}
+                                            {% else %}
+                                                <span class="text-muted">Not assigned</span>
+                                            {% endif %}
+                                        </p>
+                                        <p><strong>Duration:</strong> {{ course.duration }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{{ url_for('course_detail', id=course.id) }}" 
+                                           class="btn btn-sm btn-primary w-100">📋 View Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            🚫 No courses enrolled yet. Contact admin or teacher.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">⚡ Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('my_courses') }}" class="btn btn-primary">
+                            📚 My Courses
+                        </a>
+                        <a href="{{ url_for('my_attendance') }}" class="btn btn-success">
+                            📊 My Attendance
+                        </a>
+                        <a href="{{ url_for('profile') }}" class="btn btn-info">
+                            👤 My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

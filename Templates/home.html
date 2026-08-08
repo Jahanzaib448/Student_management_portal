@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+    <!-- ============================================ -->
+    <!-- 1. HERO SECTION                              -->
+    <!-- ============================================ -->
+    <div class="row py-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-3 fw-bold text-primary">
+                🎓 Student Management Portal
+            </h1>
+            <p class="lead text-muted">
+                A complete Learning Management System for schools, colleges, 
+                and training institutes. Manage students, teachers, courses, 
+                attendance, and results all in one place.
+            </p>
+            <div class="mt-4">
+                {% if session.get("user_id") %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-2">
+                        📊 Go to Dashboard
+                    </a>
+                    <a href="{{ url_for('profile') }}" class="btn btn-outline-primary btn-lg">
+                        👤 My Profile
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-2">
+                        📝 Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+                        🔑 Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 2. STATISTICS (If logged in)                 -->
+    <!-- ============================================ -->
+    {% if session.get("user_id") %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">📊 Quick Stats</h2>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body text-center">
+                        <h2 class="mb-0">{{ total_students or 0 }}</h2>
+                        <p class="mb-0">Total Students</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <h2 class="mb-0">{{ total_teachers or 0 }}</h2>
+                        <p class="mb-0">Total Teachers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body text-center">
+                        <h2 class="mb-0">{{ total_courses or 0 }}</h2>
+                        <p class="mb-0">Total Courses</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body text-center">
+                        <h2 class="mb-0">{{ total_users or 0 }}</h2>
+                        <p class="mb-0">Total Users</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- ============================================ -->
+    <!-- 3. FEATURES SECTION                          -->
+    <!-- ============================================ -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">🚀 Features</h2>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-primary">👨‍🎓</div>
+                    <h5 class="card-title">Student Management</h5>
+                    <p class="card-text text-muted">
+                        Add, edit, delete, and manage student profiles. 
+                        Track student progress and performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-success">👨‍🏫</div>
+                    <h5 class="card-title">Teacher Management</h5>
+                    <p class="card-text text-muted">
+                        Manage teacher profiles, assign courses, 
+                        and track teacher performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-info">📚</div>
+                    <h5 class="card-title">Course Management</h5>
+                    <p class="card-text text-muted">
+                        Create and manage courses, enroll students, 
+                        and assign teachers to courses.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-warning">📋</div>
+                    <h5 class="card-title">Attendance Tracking</h5>
+                    <p class="card-text text-muted">
+                        Mark daily attendance, generate reports, 
+                        and track student attendance percentage.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-danger">📊</div>
+                    <h5 class="card-title">Results & Reports</h5>
+                    <p class="card-text text-muted">
+                        Add marks, calculate GPA, generate report cards, 
+                        and track student academic progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <div class="display-1 text-secondary">🔐</div>
+                    <h5 class="card-title">Role-Based Access</h5>
+                    <p class="card-text text-muted">
+                        Admin, Teacher, and Student roles with 
+                        customized dashboards and permissions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 4. QUICK LINKS SECTION                       -->
+    <!-- ============================================ -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h4 class="mb-3">⚡ Quick Links</h4>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        {% if session.get("user_id") %}
+                            <a href="{{ url_for('add_student') }}" class="btn btn-outline-primary">
+                                ➕ Add Student
+                            </a>
+                            <a href="{{ url_for('add_teacher') }}" class="btn btn-outline-success">
+                                ➕ Add Teacher
+                            </a>
+                            <a href="{{ url_for('add_course') }}" class="btn btn-outline-info">
+                                ➕ Add Course
+                            </a>
+                            <a href="{{ url_for('attendance') }}" class="btn btn-outline-warning">
+                                📋 Mark Attendance
+                            </a>
+                            <a href="{{ url_for('students') }}" class="btn btn-outline-secondary">
+                                📋 View Students
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('register') }}" class="btn btn-primary">
+                                📝 Register Now
+                            </a>
+                            <a href="{{ url_for('login') }}" class="btn btn-outline-primary">
+                                🔑 Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

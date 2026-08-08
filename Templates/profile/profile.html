@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">👤 My Profile</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Profile Picture -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+                            <img src="{{ user.get_profile_pic() }}" 
+                                 alt="Profile Picture"
+                                 class="rounded-circle border border-3 border-primary"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                            <span class="position-absolute bottom-0 end-0">
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ user.role|upper }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+                        <!-- ============================================ -->
+                        <!-- 👇 PROFILE PICTURE UPLOAD - NEW              -->
+                        <!-- ============================================ -->
+                        <div class="mb-3">
+                            <label for="profile_pic" class="form-label">📸 Profile Picture</label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="profile_pic" 
+                                   name="profile_pic"
+                                   accept="image/*">
+                            <small class="text-muted">
+                                Allowed: PNG, JPG, JPEG, GIF. Max size: 2MB
+                            </small>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="full_name" 
+                                   name="full_name" 
+                                   value="{{ user.full_name }}"
+                                   required>
+                        </div>
+
+                        <!-- Username (Read-only) -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="username" 
+                                   value="{{ user.username }}"
+                                   disabled>
+                            <small class="text-muted">Username cannot be changed.</small>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="email" 
+                                   name="email" 
+                                   value="{{ user.email }}"
+                                   required>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="alert alert-info">
+                            <h5 class="mb-2">📊 Your Statistics</h5>
+                            <p class="mb-1">Total Students: <strong>{{ total_students }}</strong></p>
+                            <p class="mb-0">Total Courses: <strong>{{ total_courses }}</strong></p>
+                            <p class="mb-0">Role: <strong>{{ user.role|upper }}</strong></p>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                💾 Update Profile
+                            </button>
+                            <a href="{{ url_for('change_password') }}" class="btn btn-warning btn-lg">
+                                🔐 Change Password
+                            </a>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                                ← Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

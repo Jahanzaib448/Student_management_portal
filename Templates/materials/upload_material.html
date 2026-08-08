@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Material{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">📤 Upload Course Material</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        <strong>Course:</strong> {{ course.course_name }} ({{ course.course_code }})
+                    </p>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="title" 
+                                   name="title" 
+                                   placeholder="e.g., Lecture 1: Introduction"
+                                   required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="3"
+                                      placeholder="Brief description of this material"></textarea>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Select File</label>
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="file" 
+                                   name="file"
+                                   required>
+                            <small class="text-muted">
+                                Allowed: PDF, MP4, PPT, DOC, Images, ZIP, etc.
+                                Max size: 500MB
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                📤 Upload Material
+                            </button>
+                            <a href="{{ url_for('course_materials', course_id=course.id) }}" 
+                               class="btn btn-secondary">
+                                ← Back to Materials
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

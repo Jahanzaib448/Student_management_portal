@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Teacher{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-warning">
+                    <h3 class="mb-0">✏️ Edit Teacher</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('edit_teacher', id=teacher.id) }}">
+                        <!-- Teacher Name -->
+                        <div class="mb-3">
+                            <label for="teacher_name" class="form-label">Full Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="teacher_name" 
+                                   name="teacher_name" 
+                                   value="{{ teacher.teacher_name }}"
+                                   required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="email" 
+                                   name="email" 
+                                   value="{{ teacher.email }}"
+                                   required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   id="phone" 
+                                   name="phone" 
+                                   value="{{ teacher.phone }}"
+                                   required>
+                        </div>
+
+                        <!-- Specialization -->
+                        <div class="mb-3">
+                            <label for="specialization" class="form-label">Specialization</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="specialization" 
+                                   name="specialization" 
+                                   value="{{ teacher.specialization }}"
+                                   required>
+                        </div>
+
+                        <!-- Qualification -->
+                        <div class="mb-3">
+                            <label for="qualification" class="form-label">Qualification</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="qualification" 
+                                   name="qualification" 
+                                   value="{{ teacher.qualification }}"
+                                   required>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                💾 Update Teacher
+                            </button>
+                            <a href="{{ url_for('teachers') }}" class="btn btn-secondary">
+                                ← Back to Teachers
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

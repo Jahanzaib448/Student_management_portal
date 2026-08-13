@@ -28,9 +28,13 @@ db = SQLAlchemy(app)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 # Upload folder path
-UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Upload folder path
+if os.environ.get("VERCEL"):
+    UPLOAD_FOLDER = "/tmp/uploads"
+else:
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), "static/uploads")
 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Max file size: 2MB
 MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 
@@ -75,9 +79,16 @@ def get_material_type(filename):
     return MATERIAL_TYPES.get(ext, 'Other')
 
 # Course material upload folder
-MATERIAL_UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads/materials')
-os.makedirs(MATERIAL_UPLOAD_FOLDER, exist_ok=True)
+# Course material upload folder
+if os.environ.get("VERCEL"):
+    MATERIAL_UPLOAD_FOLDER = "/tmp/uploads/materials"
+else:
+    MATERIAL_UPLOAD_FOLDER = os.path.join(
+        os.getcwd(),
+        "static/uploads/materials"
+    )
 
+os.makedirs(MATERIAL_UPLOAD_FOLDER, exist_ok=True)
 
 
 # ============================================
